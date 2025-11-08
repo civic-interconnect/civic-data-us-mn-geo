@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/civic-interconnect/civic-geo-generator/main/schemas/output/metadata/v0.1.0/schema.json",
+  "id": "mn-precincts",
+  "title": "Minnesota Precincts",
+  "unit_type": "precinct",
+  "id_field": "precinct_id",
+  "name_field": "precinct_name",
+  "snapshot_version": "2025-04",
+  "generated_at": "2025-11-08T18:06:43Z",
+  "paths": {
+    "full_geojson": "full.geojson",
+    "web_geojson": "web.geojson"
+  },
+  "stats": {
+    "features": 4105,
+    "bbox": [
+      -97.2391,
+      43.4994,
+      -89.4918,
+      49.3838
+    ]
+  },
+  "spatial": {
+    "crs": "EPSG:4326",
+    "geometry_type": "MultiPolygon"
+  },
+  "source_name": "Minnesota Secretary of State",
+  "source_url": "https://www.sos.state.mn.us/elections-voting/data-maps/precinct-maps/",
+  "license": "CC-BY-4.0",
+  "source_fields": {
+    "precinct_id": [
+      "precinct_id"
+    ],
+    "precinct_name": [
+      "precinct_name"
+    ],
+    "county": [
+      "county"
+    ]
+  }
+}

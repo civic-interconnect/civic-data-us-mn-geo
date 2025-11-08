@@ -1,0 +1,22 @@
+name: Validate GeoJSON
+
+on:
+  push:
+    paths:
+      - "data/**/*.geojson"
+  pull_request:
+    paths:
+      - "data/**/*.geojson"
+  workflow_dispatch: {}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install geojsonhint
+        run: npm install -g @mapbox/geojsonhint
+
+      - name: Validate GeoJSON files
+        run: .github/scripts/validate_geojson.sh

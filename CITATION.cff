@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it as below."
+title: "Civic Interconnect - Minnesota Geographic Data"
+authors:
+  - family-names: Case
+    given-names: Denise
+    affiliation: Civic Interconnect
+version: "2025-04"
+date-released: 2025-11-08
+license: "CC-BY-4.0"
+repository-code: "https://github.com/civic-interconnect/civic-data-boundaries-us-mn"
+abstract: >
+  Boundary datasets for the state of Minnesota including precincts, counties,
+  school districts, and other civic geographies for use in research and applications.
+preferred-citation:
+  type: dataset
+  authors:
+    - family-names: Case
+      given-names: Denise
+  title: "Civic Interconnect - Minnesota Geographic Data"
+  year: 2025
+  version: "2025-04"
+  doi: 10.5281/zenodo.XXXXXXX

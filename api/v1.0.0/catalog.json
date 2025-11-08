@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "country": "us",
+  "states": [
+    {
+      "code": "mn",
+      "name": "Minnesota",
+      "repo": "civic-data-boundaries-us-mn",
+      "repo_url": "https://github.com/civic-interconnect/civic-data-boundaries-us-mn",
+      "layers": ["precincts", "school-districts", "counties"],
+      "manifest_url": "https://raw.githubusercontent.com/civic-interconnect/civic-data-boundaries-us-mn/main/manifest.json"
+    }
+  ]
+}

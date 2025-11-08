@@ -1,0 +1,9 @@
+{
+  "version": "2025-04",
+  "redirect": "2025-04/",
+  "files": {
+    "full": "2025-04/full.geojson",
+    "web": "2025-04/web.geojson",
+    "metadata": "2025-04/metadata.json"
+  }
+}

@@ -1,0 +1,74 @@
+# ----------------------------------------
+# OS junk files
+# ----------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100/
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+Icon\r
+
+# ----------------------------------------
+# Editors / IDEs
+# ----------------------------------------
+.vscode/
+.idea/
+*.code-workspace
+
+# ----------------------------------------
+# Environments and caches
+# ----------------------------------------
+.venv/
+venv/
+node_modules/
+__pycache__/
+.ipynb_checkpoints/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.cache/
+.tmp/
+tmp/
+
+# ----------------------------------------
+# Build / dist / logs
+# ----------------------------------------
+build/
+dist/
+*.log
+logs/
+reports/
+
+# ----------------------------------------
+# Package and lock files (optional)
+# ----------------------------------------
+uv.lock
+*.egg-info/
+*.whl
+.eggs/
+
+# ----------------------------------------
+# Ignore any inbound / intermediate / generated data folders
+# ----------------------------------------
+data-in/**
+!data-in/*.md
+
+data-out/**
+!data-out/*.md
+
+storage/**
+!storage/*.md
+
+tiger/**
+!tiger/*.md
+
+# ----------------------------------------
+# Allow tracked data and JSON/GeoJSON files
+# ----------------------------------------
+!data/
+!*.json
+!*.geojson

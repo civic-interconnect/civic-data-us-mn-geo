@@ -1,0 +1,27 @@
+name: Update Latest Links
+
+on:
+  push:
+    paths:
+      - "data/**/*.geojson"
+    branches:
+      - main
+  workflow_dispatch: {}
+
+jobs:
+  update-latest:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Update latest directories
+        run: .github/scripts/update_latest.sh
+
+      - name: Commit updates
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff --staged --quiet || git commit -m "Update latest/ pointers"
+          git push
