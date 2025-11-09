@@ -87,3 +87,4 @@ tiger/**
 data/**/*
 !data/**/*.md
 !data/**/README.md
+demo*.json

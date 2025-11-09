@@ -1,0 +1,30 @@
+version: 2
+updates:
+  # 1. Keep Node.js dependencies up to date
+  - package-ecosystem: "npm"
+    directory: "/"    # location of package.json
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "08:00"
+      timezone: "America/Chicago"
+    commit-message:
+      prefix: "deps"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "automerge"
+
+  # 2. Keep GitHub Actions versions up to date
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "08:30"
+      timezone: "America/Chicago"
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "ci"
+      - "automerge"

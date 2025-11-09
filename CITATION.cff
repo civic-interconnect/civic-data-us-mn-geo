@@ -5,7 +5,7 @@ authors:
   - family-names: Case
     given-names: Denise
     affiliation: Civic Interconnect
-version: "2025-04-r1"
+version: "2025-04-v2"
 date-released: 2025-11-08
 license: "CC-BY-4.0"
 repository-code: "https://github.com/civic-interconnect/civic-data-boundaries-us-mn"
@@ -34,8 +34,8 @@ preferred-citation:
       affiliation: Civic Interconnect
   title: "Civic Interconnect - Geographic Data - US Minnesota"
   year: 2025
-  version: "2025-04-r1"
-  doi: 10.5281/zenodo.17560656
+  version: "2025-04-v2"
+  doi: 10.5281/zenodo.17561813
 
 references:
   - type: dataset

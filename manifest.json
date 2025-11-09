@@ -1,6 +1,96 @@
 {
-  "dataset": "civic-boundaries-us-mn",
+  "dataset": "civic-data-boundaries-us-mn",
   "description": "Metadata and provenance for Minnesota precinct boundary layers.",
-  "license": "CC BY 4.0 (for metadata, configuration, and documentation). Original boundary data © Minnesota Secretary of State, used under website Terms & Conditions (no explicit license).",
-  "generated_at": "2025-11-08T18:20:22Z"
+  "license": "CC BY 4.0 (for metadata, configuration, and documentation). Boundary data © Minnesota Secretary of State, used under website Terms & Conditions (no explicit license).",
+  "generated_at": "2025-11-08T18:20:22Z",
+  "version": "2025-04-v3",
+  "state": {
+    "code": "MN",
+    "name": "Minnesota",
+    "fips": "27"
+  },
+  "metadata": {
+    "source": "Minnesota Secretary of State",
+    "sourceUrl": "https://www.sos.mn.gov/election-administration-campaigns/data-maps/voting-precincts/",
+    "license": "No explicit license - Terms & Conditions apply",
+    "redistributable": false,
+    "lastUpdated": "2025-04-01",
+    "updateFrequency": "After redistricting",
+    "note": "Data fetched directly from official source, not redistributed"
+  },
+  "layers": {
+    "precincts": {
+      "available": true,
+      "sources": [
+        {
+          "id": "cd1",
+          "name": "Congressional District 1",
+          "url": "https://www.sos.mn.gov/media/2785/mn-cd1-precincts.json",
+          "format": "geojson"
+        },
+        {
+          "id": "cd2",
+          "name": "Congressional District 2",
+          "url": "https://www.sos.mn.gov/media/2786/mn-cd2-precincts.json",
+          "format": "geojson"
+        },
+        {
+          "id": "cd3",
+          "name": "Congressional District 3",
+          "url": "https://www.sos.mn.gov/media/2787/mn-cd3-precincts.json",
+          "format": "geojson"
+        },
+        {
+          "id": "cd4",
+          "name": "Congressional District 4",
+          "url": "https://www.sos.mn.gov/media/2788/mn-cd4-precincts.json",
+          "format": "geojson"
+        },
+        {
+          "id": "cd5",
+          "name": "Congressional District 5",
+          "url": "https://www.sos.mn.gov/media/2789/mn-cd5-precincts.json",
+          "format": "geojson"
+        },
+        {
+          "id": "cd6",
+          "name": "Congressional District 6",
+          "url": "https://www.sos.mn.gov/media/2790/mn-cd6-precincts.json",
+          "format": "geojson"
+        },
+        {
+          "id": "cd7",
+          "name": "Congressional District 7",
+          "url": "https://www.sos.mn.gov/media/2791/mn-cd7-precincts.json",
+          "format": "geojson"
+        },
+        {
+          "id": "cd8",
+          "name": "Congressional District 8",
+          "url": "https://www.sos.mn.gov/media/2792/mn-cd8-precincts.json",
+          "format": "geojson"
+        }
+      ],
+      "schema": {
+        "propertyMap": {
+          "precinct_id": "PrecinctID",
+          "precinct_name": "Precinct",
+          "county": "County",
+          "us_house": "CongDist",
+          "mn_senate": "MNSenDist",
+          "mn_house": "MNLegDist",
+          "county_commission": "CtyComDist"
+        },
+        "geometryTransform": "geometryCollection_to_multiPolygon"
+      }
+    },
+    "counties": {
+      "available": true,
+      "note": "County boundaries included with precinct data"
+    },
+    "school_districts": {
+      "available": false,
+      "note": "School district boundaries available from MN Dept of Education"
+    }
+  }
 }

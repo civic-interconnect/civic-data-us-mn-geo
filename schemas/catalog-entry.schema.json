@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "catalog-entry.schema.json",
+  "title": "Civic Data Boundaries Catalog Entry",
+  "type": "object",
+  "description": "Defines a single state-level entry in the civic-data-boundaries catalog.",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Official two-letter uppercase state or territory code (ISO 3166-2). Always uppercase.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "code_lower": {
+      "type": "string",
+      "description": "Lowercase equivalent of `code` (automatically generated for convenience).",
+      "pattern": "^[a-z]{2}$"
+    },
+    "fips": {
+      "type": "string",
+      "description": "FIPS state code (two-digit string).",
+      "pattern": "^\\d{2}$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Full state or territory name (e.g., 'Minnesota')."
+    },
+    "repo": {
+      "type": "string",
+      "description": "GitHub repository name containing the data and metadata."
+    },
+    "repo_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Full URL to the repository."
+    },
+    "layers": {
+      "type": "array",
+      "description": "List of available layers for this state (e.g., precincts, counties, school_districts).",
+      "items": {
+        "type": "string",
+        "enum": ["precincts", "counties", "school_districts"]
+      },
+      "minItems": 1
+    },
+    "manifest_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to the state-specific manifest.json file."
+    }
+  },
+  "required": [
+    "code",
+    "fips",
+    "name",
+    "repo",
+    "repo_url",
+    "layers",
+    "manifest_url"
+  ],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "code": "MN",
+      "code_lower": "mn",
+      "fips": "27",
+      "name": "Minnesota",
+      "repo": "civic-data-boundaries-us-mn",
+      "repo_url": "https://github.com/civic-interconnect/civic-data-boundaries-us-mn",
+      "layers": ["precincts", "counties", "school_districts"],
+      "manifest_url": "https://raw.githubusercontent.com/civic-interconnect/civic-data-boundaries-us-mn/main/manifest.json"
+    }
+  ]
+}

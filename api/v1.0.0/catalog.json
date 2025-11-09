@@ -3,11 +3,12 @@
   "country": "us",
   "states": [
     {
-      "code": "mn",
+      "code": "MN",
+      "fips": "27",
       "name": "Minnesota",
       "repo": "civic-data-boundaries-us-mn",
       "repo_url": "https://github.com/civic-interconnect/civic-data-boundaries-us-mn",
-      "layers": ["precincts", "school-districts", "counties"],
+      "layers": ["precincts", "counties", "school_districts"],
       "manifest_url": "https://raw.githubusercontent.com/civic-interconnect/civic-data-boundaries-us-mn/main/manifest.json"
     }
   ]

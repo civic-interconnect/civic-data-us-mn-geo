@@ -14,6 +14,15 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
 
 ---
 
+## [1.0.2] - 2025-11-09
+
+### Added
+- **Functional adapter (js/adapter.js)** to fetch and transform precinct data.
+- **Functional transformer (js/transform.js)** with manifest-driven schema mapping.
+
+
+---
+
 ## [1.0.1] - 2025-11-08
 
 ### Changed
@@ -41,6 +50,7 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
   Tag the repository with `vX.Y.Z` to publish a release.
 - Documentation and badges are updated per tag and aliased to **latest**.
 
-[Unreleased]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/releases/tag/v1.0.2
 [1.0.1]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/releases/tag/v1.0.1
 [1.0.0]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/releases/tag/v1.0.0

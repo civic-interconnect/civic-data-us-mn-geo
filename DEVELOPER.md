@@ -1,13 +1,6 @@
 # DEVELOPER.md
 
-This is a **data repository** for boundary layers (precincts, counties, districts, etc.).
-GitHub Actions validate and update GeoJSON files on push.
-
-For most users:  
-> Fork, add GeoJSON, push, check Actions, open PR.  
-
-For maintainers:  
-> Test local scripts as described below.
+This repository contains a **data adapter** for boundary layers such as precincts, counties, and districts.
 
 ## DEV 1. Get the Code
 
@@ -27,24 +20,21 @@ git pull origin main
 
 To test or debug locally:
 
-- Install **Git**, **VS Code**, and [**Node.js**](https://nodejs.org/).  
+- Install **Git**, **VS Code**, and [**Node.js**](https://nodejs.org/) 20+ (tested with Node 22).
 - Open a terminal (bash, zsh, or **Git Bash**, not PowerShell).  
-- Make scripts executable and install `geojsonhint`:
 
 ```bash
 chmod +x .github/scripts/*.sh
-npm install -g @mapbox/geojsonhint
-./.github/scripts/validate_geojson.sh
-./.github/scripts/update_latest.sh
+npx npm-check-updates -u
+npm install
+npm run validate:catalog
+npm test
 ```
 
-## DEV 3. Add or update data under `data/`.  
 
-Add new data under the data folder. Follow conventions. 
+## DEV 3. Update CHANGELOG and Push Changes
 
-## DEV 4. Update CHANGELOG and Push Changes
-
-Update `CHANGELOG.md`:
+After changes, update `CHANGELOG.md`:
 1. Add a short description block near the top.  
 2. Add a matching entry at the bottom.
 
@@ -54,7 +44,7 @@ git commit -m "Prep vx.y.z"
 git push -u origin main
 ```
 
-## DEV 5. Add Git tag and Push it
+## DEV 4. Add Git tag and Push it
 
 Wait for all GitHub Action checks to pass (green checks), then:
 
@@ -63,7 +53,7 @@ git tag vx.y.z -m "x.y.z"
 git push origin vx.y.z
 ```
 
-## DEV 6. Create Pull Request (PR)
+## DEV 5. Create Pull Request (PR)
 
 After confirming all checks pass:
 
@@ -74,3 +64,14 @@ After confirming all checks pass:
    - **base branch:** `main`
    - **compare branch:** your `main`
 4. Add a short title and description, then click **Create Pull Request**.
+
+## DEV 6. Update Zenodo, Citation, and push
+
+After pushing a new tag:
+
+1. Upload new release archive (civic-data-boundaries-us-mn-2025-04-r#.zip) to Zenodo where # is the next incremental zipfile iteration. 
+2. Zenodo generates a new record ID.
+3. Copy that record DOI into CITATION.cff under preferred-citation.doi.
+4. Copy that record into README.md Zenodo badge. 
+5. Git add-commit-push CITATION.cff + README.md updates referencing the new DOI.
+   

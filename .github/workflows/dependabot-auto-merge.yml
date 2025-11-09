@@ -1,0 +1,31 @@
+name: Dependabot auto-merge
+
+# Important: 
+# Repo Settings / General /Pull requests / Allow auto-merge (Required)
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge:
+    # Only for Dependabot PRs
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable auto-merge for Dependabot PRs with 'automerge' label
+        uses: peter-evans/enable-pull-request-automerge@v3
+        if: >
+          contains(
+            join(fromJSON(toJSON(github.event.pull_request.labels)).*.name, ' '),
+            'automerge'
+          )
+        with:
+          # Required: which PR to enable auto-merge on
+          pull-request-number: ${{ github.event.pull_request.number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          merge-method: squash

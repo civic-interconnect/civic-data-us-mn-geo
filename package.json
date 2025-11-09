@@ -1,0 +1,15 @@
+{
+  "name": "civic-data-boundaries-us-mn",
+  "version": "2025.04.1",
+  "description": "Data adapter, metadata, and transformation functions for Minnesota boundary data.",
+  "license": "CC-BY-4.0",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test js/*.test.js",
+    "validate:catalog": "node scripts/validate-catalog.js"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  }
+}
