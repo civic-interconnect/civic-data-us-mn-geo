@@ -3,7 +3,7 @@
   "description": "Metadata and provenance for Minnesota precinct boundary layers.",
   "license": "CC BY 4.0 (for metadata, configuration, and documentation). Boundary data © Minnesota Secretary of State, used under website Terms & Conditions (no explicit license).",
   "generated_at": "2025-11-08T18:20:22Z",
-  "version": "2025-04-v3",
+  "version": "2025-04-v1.0.4",
   "state": {
     "code": "MN",
     "name": "Minnesota",
@@ -21,6 +21,8 @@
   "layers": {
     "precincts": {
       "available": true,
+      "url": "https://www.sos.mn.gov/media/2791/mn-precincts.json",
+      "format": "geojson",
       "sources": [
         {
           "id": "cd1",

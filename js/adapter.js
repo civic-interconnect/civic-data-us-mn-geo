@@ -6,6 +6,7 @@
  */
 
 const { CRS84, transformFeatureCollection } = require("./transform");
+const src_list = require("./sources");
 
 let manifest = null;
 try {
@@ -20,17 +21,34 @@ try {
 
 class MinnesotaAdapter {
   constructor() {
-    // Prefer reading precinct sources from manifest.json
     const precinctLayer =
-      manifest &&
-      manifest.layers &&
-      manifest.layers.precincts &&
-      Array.isArray(manifest.layers.precincts.sources)
+      manifest && manifest.layers && manifest.layers.precincts
         ? manifest.layers.precincts
         : null;
 
-    if (precinctLayer) {
-      // Use manifest-driven definitions
+    // NEW: decide mode based on manifest
+    // - mode = "single": use statewide URL (mn-precincts.json)
+    // - mode = "sources": use per-CD sources array
+    // - fallback: hard-coded CD URLs
+    this.mode = "sources";
+    this.precinctUrl = null;
+    this.sources = [];
+
+    if (precinctLayer && precinctLayer.url) {
+      // Prefer the statewide combined URL if present
+      this.mode = "single";
+      this.precinctUrl = precinctLayer.url;
+      console.log(
+        "[MinnesotaAdapter] Using statewide precinct URL from manifest:",
+        this.precinctUrl
+      );
+    } else if (
+      precinctLayer &&
+      Array.isArray(precinctLayer.sources) &&
+      precinctLayer.sources.length > 0
+    ) {
+      // Use manifest-driven per-CD sources
+      this.mode = "sources";
       this.sources = precinctLayer.sources.map((src) => {
         return {
           // Keep a simple numeric cd from the manifest id (e.g. "cd1" -> "1")
@@ -41,42 +59,20 @@ class MinnesotaAdapter {
           url: src.url,
         };
       });
+      console.log(
+        "[MinnesotaAdapter] Using",
+        this.sources.length,
+        "precinct sources from manifest"
+      );
     } else {
-      // Fallback: Minnesota Secretary of State precinct file URLs
-      this.sources = [
-        {
-          cd: "1",
-          url: "https://www.sos.mn.gov/media/2785/mn-cd1-precincts.json",
-        },
-        {
-          cd: "2",
-          url: "https://www.sos.mn.gov/media/2786/mn-cd2-precincts.json",
-        },
-        {
-          cd: "3",
-          url: "https://www.sos.mn.gov/media/2787/mn-cd3-precincts.json",
-        },
-        {
-          cd: "4",
-          url: "https://www.sos.mn.gov/media/2788/mn-cd4-precincts.json",
-        },
-        {
-          cd: "5",
-          url: "https://www.sos.mn.gov/media/2789/mn-cd5-precincts.json",
-        },
-        {
-          cd: "6",
-          url: "https://www.sos.mn.gov/media/2790/mn-cd6-precincts.json",
-        },
-        {
-          cd: "7",
-          url: "https://www.sos.mn.gov/media/2791/mn-cd7-precincts.json",
-        },
-        {
-          cd: "8",
-          url: "https://www.sos.mn.gov/media/2792/mn-cd8-precincts.json",
-        },
-      ];
+      // Fallback: Minnesota Secretary of State precinct file URLs (per-CD)
+      this.mode = "sources";
+
+      this.sources = src_list;
+      console.log(
+        "[MinnesotaAdapter] Using fallback hard-coded CD sources:",
+        this.sources.map((s) => s.cd).join(", ")
+      );
     }
   }
 
@@ -102,6 +98,10 @@ class MinnesotaAdapter {
   async fetchDistrict(source) {
     try {
       const response = await fetch(source.url);
+      console.log(`[fetchDistrict] Fetching MN CD${source.cd} from ${source.url}`);
+
+      const start_of_response = (await response.text()).slice(0, 100);
+      console.log(`[fetchDistrict] Response: ${start_of_response}`);
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
@@ -111,9 +111,54 @@ class MinnesotaAdapter {
       );
       return data;
     } catch (error) {
-      console.error(`Failed to fetch MN CD${source.cd}:`, error.message);
+      console.error(
+        `Failed to fetch MN CD${source.cd} (${source.url}):`,
+        error.message
+      );
       return null;
     }
+  }
+
+  /**
+   * NEW: fetch statewide precincts from a single URL (mn-precincts.json)
+   */
+  async fetchStatewide(options = {}) {
+    if (!this.precinctUrl) {
+      throw new Error(
+        "[MinnesotaAdapter] fetchStatewide called without precinctUrl"
+      );
+    }
+
+    console.log(
+      "[MinnesotaAdapter] Fetching statewide precinct data from",
+      this.precinctUrl
+    );
+
+    const response = await fetch(this.precinctUrl);
+    console.log(`[MinnesotaAdapter] Fetched statewide precincts from ${this.precinctUrl}`);
+
+    const start_of_response = (await response.text()).slice(0, 100);
+    console.log(`[MinnesotaAdapter] Response: ${start_of_response}`);
+    
+    if (!response.ok) {
+      throw new Error(
+        `[MinnesotaAdapter] Statewide fetch failed: HTTP ${response.status}`
+      );
+    }
+
+    const rawData = await response.json();
+    const transformed = transformFeatureCollection(rawData);
+
+    const unifiedData = {
+      ...transformed,
+      metadata: this.getMetadata(),
+    };
+
+    console.log(
+      `[MinnesotaAdapter] Transformed ${unifiedData.features.length} statewide precincts`
+    );
+
+    return unifiedData;
   }
 
   /**
@@ -122,6 +167,18 @@ class MinnesotaAdapter {
    */
   async fetchPrecincts(options = {}) {
     console.log("Fetching Minnesota precinct data from Secretary of State...");
+
+    // If we have a statewide URL, prefer that path
+    if (this.mode === "single" && this.precinctUrl) {
+      return this.fetchStatewide(options);
+    }
+
+    // Otherwise, use per-district sources (manifest or fallback)
+    if (!this.sources || this.sources.length === 0) {
+      throw new Error(
+        "[MinnesotaAdapter] No precinct sources configured (neither statewide nor per-CD)"
+      );
+    }
 
     // Fetch all congressional districts in parallel
     const fetchPromises = this.sources.map((source) =>

@@ -50,7 +50,12 @@ const manifestPropertyMap =
 function transformProperties(mnProperties) {
   const out = {};
   for (const [unifiedKey, sourceKey] of Object.entries(manifestPropertyMap)) {
-    out[unifiedKey] = mnProperties[sourceKey];
+    out[unifiedKey] = Object.prototype.hasOwnProperty.call(
+      mnProperties,
+      sourceKey
+    )
+      ? mnProperties[sourceKey]
+      : null;
   }
   return out;
 }

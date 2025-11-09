@@ -20,23 +20,33 @@ git pull origin main
 
 To test or debug locally:
 
-- Install **Git**, **VS Code**, and [**Node.js**](https://nodejs.org/) 20+ (tested with Node 22).
+- Install **Git**, **VS Code**, and [**Node.js**](https://nodejs.org/) (tested with Node 24).
 - Open a terminal (bash, zsh, or **Git Bash**, not PowerShell).  
 
 ```bash
 chmod +x .github/scripts/*.sh
 npx npm-check-updates -u
 npm install
-npm run validate:catalog
+npm run validate
 npm test
+
+# or
+
+npm run check
 ```
 
 
 ## DEV 3. Update CHANGELOG and Push Changes
 
-After changes, update `CHANGELOG.md`:
+After changes, 
+
+Update `CHANGELOG.md` with the new repo version:
 1. Add a short description block near the top.  
 2. Add a matching entry at the bottom.
+   
+Update `CITATION.cff` and manifest.json with the new incremented version. 
+1. In CITATION, version appears twice.
+2. In manifest, version appears once. 
 
 ```shell
 git add .

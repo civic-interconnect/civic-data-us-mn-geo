@@ -1,15 +1,40 @@
 {
   "name": "civic-data-boundaries-us-mn",
-  "version": "2025.04.1",
-  "description": "Data adapter, metadata, and transformation functions for Minnesota boundary data.",
-  "license": "CC-BY-4.0",
+  "version": "2025.04.4",
+  "description": "Minnesota boundary data adapter with validation",
   "type": "commonjs",
+  "main": "js/adapter.js",
   "scripts": {
-    "test": "node --test js/*.test.js",
-    "validate:catalog": "node scripts/validate-catalog.js"
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "node --test --test-reporter=spec js/adapter.test.js",
+    "test:integration": "node --test --test-reporter=spec js/adapter.integration.test.js",
+    "test:watch": "node --test --watch --test-reporter=spec js/*.test.js",
+    "validate": "npm run validate:catalog",
+    "validate:catalog": "node scripts/validate-catalog.js",
+    "check": "npm run test && npm run validate",
+    "ci": "npm run test:unit && npm run test:integration && npm run validate"
   },
+  "dependencies": {},
   "devDependencies": {
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "CC-BY-4.0",
+  "keywords": [
+    "minnesota",
+    "precincts",
+    "boundaries",
+    "geojson",
+    "elections",
+    "civic-data",
+    "congressional-districts"
+  ],
+  "author": "Denise Case, Civic Interconnect",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/denisecase/civic-data-us-mn.git"
   }
 }

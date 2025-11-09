@@ -14,7 +14,16 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
 
 ---
 
-## [1.0.2] - 2025-11-09
+## [1.0.4] - 2025-11-09
+
+### Changed
+- Use **combined file** rather than individual json (geojson) files
+- Page: <https://www.sos.mn.gov/election-administration-campaigns/data-maps/geojson-files/>
+- Combined: <https://www.sos.mn.gov/media/2791/mn-precincts.json>
+
+---
+
+## [1.0.3] - 2025-11-09
 
 ### Added
 - **Functional adapter (js/adapter.js)** to fetch and transform precinct data.
@@ -50,7 +59,9 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
   Tag the repository with `vX.Y.Z` to publish a release.
 - Documentation and badges are updated per tag and aliased to **latest**.
 
-[Unreleased]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/releases/tag/v1.0.4
+[1.0.3]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/releases/tag/v1.0.3
 [1.0.2]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/releases/tag/v1.0.2
 [1.0.1]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/releases/tag/v1.0.1
 [1.0.0]: https://github.com/civic-interconnect/civic-data-boundaries-us-mn/releases/tag/v1.0.0

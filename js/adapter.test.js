@@ -36,38 +36,29 @@ const SAMPLE_POLYGON = {
   ],
 };
 
-test("MinnesotaAdapter constructor uses manifest precinct sources", () => {
+test("MinnesotaAdapter constructor uses statewide URL when present in manifest", () => {
   const adapter = new MinnesotaAdapter();
 
   const precinctLayer = manifest.layers.precincts;
-  assert.ok(precinctLayer);
-  assert.ok(Array.isArray(precinctLayer.sources));
+  assert.ok(precinctLayer, "precinct layer should exist in manifest");
 
-  const expectedSources = precinctLayer.sources;
+  // In the new manifest, we expect a statewide 'url'
+  assert.ok(
+    typeof precinctLayer.url === "string" && precinctLayer.url.length > 0,
+    "precincts layer should have a statewide url"
+  );
 
-  // Same count
-  assert.strictEqual(adapter.sources.length, expectedSources.length);
-
-  // Each source matches url and cd derived from id
-  adapter.sources.forEach((src, idx) => {
-    const manifestSrc = expectedSources[idx];
-
-    const expectedCd =
-      typeof manifestSrc.id === "string"
-        ? manifestSrc.id.replace(/^cd/, "")
-        : String(manifestSrc.id);
-
-    assert.strictEqual(
-      src.cd,
-      expectedCd,
-      `source ${idx} cd should be ${expectedCd}`
-    );
-    assert.strictEqual(
-      src.url,
-      manifestSrc.url,
-      `source ${idx} url should match manifest`
-    );
-  });
+  // Adapter should detect and prefer the statewide URL
+  assert.strictEqual(
+    adapter.mode,
+    "single",
+    "adapter.mode should be 'single' when statewide url is present"
+  );
+  assert.strictEqual(
+    adapter.precinctUrl,
+    precinctLayer.url,
+    "adapter.precinctUrl should match manifest.precincts.url"
+  );
 });
 
 test("MinnesotaAdapter.getMetadata returns expected structure", () => {
@@ -86,8 +77,49 @@ test("MinnesotaAdapter.getMetadata returns expected structure", () => {
   });
 });
 
-test("fetchPrecincts merges transformed districts and applies CRS84 + metadata", async () => {
+test("fetchPrecincts uses statewide URL when in 'single' mode", async () => {
   const adapter = new MinnesotaAdapter();
+
+  // Ensure we are in single-url mode for this test
+  adapter.mode = "single";
+  adapter.precinctUrl =
+    manifest.layers.precincts.url || "https://example.com/mn-precincts.json";
+
+  // Stub fetchStatewide so we don't hit real HTTP or transform
+  const fakeResult = {
+    type: "FeatureCollection",
+    name: "full",
+    crs: CRS84,
+    metadata: adapter.getMetadata(),
+    features: [{ type: "Feature", properties: {}, geometry: SAMPLE_POLYGON }],
+  };
+
+  let called = false;
+  adapter.fetchStatewide = async (options) => {
+    called = true;
+    return fakeResult;
+  };
+
+  const unified = await adapter.fetchPrecincts();
+
+  assert.ok(called, "fetchStatewide should be called in 'single' mode");
+  assert.strictEqual(
+    unified,
+    fakeResult,
+    "fetchPrecincts should return the result from fetchStatewide in 'single' mode"
+  );
+});
+
+test("fetchPrecincts merges transformed districts and applies CRS84 + metadata in 'sources' mode", async () => {
+  const adapter = new MinnesotaAdapter();
+
+  // Force adapter into 'sources' mode with a custom set of sources
+  adapter.mode = "sources";
+  adapter.sources = [
+    { cd: "1", url: "https://example.com/cd1" },
+    { cd: "2", url: "https://example.com/cd2" },
+    { cd: "3", url: "https://example.com/cd3" },
+  ];
 
   // Override fetchDistrict to avoid real HTTP and to return minimal MN-style data.
   adapter.fetchDistrict = async (source) => {
@@ -129,7 +161,7 @@ test("fetchPrecincts merges transformed districts and applies CRS84 + metadata",
     .map((f) => f.properties.precinct_id)
     .filter((id) => id !== undefined)
     .sort();
-  // Should be like ["0001", "0002", ..., "0008"] given current manifest
+
   assert.strictEqual(
     ids.length,
     sourceCount,
@@ -137,8 +169,15 @@ test("fetchPrecincts merges transformed districts and applies CRS84 + metadata",
   );
 });
 
-test("fetchPrecincts throws when all districts fail", async () => {
+test("fetchPrecincts throws when all districts fail in 'sources' mode", async () => {
   const adapter = new MinnesotaAdapter();
+
+  // Force 'sources' mode with a non-empty sources list
+  adapter.mode = "sources";
+  adapter.sources = [
+    { cd: "1", url: "https://example.com/cd1" },
+    { cd: "2", url: "https://example.com/cd2" },
+  ];
 
   // Force every district fetch to fail (return null as in catch path)
   adapter.fetchDistrict = async () => null;

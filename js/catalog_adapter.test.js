@@ -88,7 +88,7 @@ test("catalog Minnesota entry is consistent with manifest.json", () => {
   assert.ok(manifest.layers.precincts);
 });
 
-test("catalog -> MinnesotaAdapter -> unified data pipeline works", async () => {
+test("catalog -> MinnesotaAdapter -> unified data pipeline works (sources mode)", async () => {
   const mnEntry = catalog.states.find((s) => s.code === "MN");
   assert.ok(mnEntry, "Minnesota entry should exist in catalog.states");
 
@@ -98,6 +98,15 @@ test("catalog -> MinnesotaAdapter -> unified data pipeline works", async () => {
   // 3) Use state.repo/state.code to decide which adapter to instantiate
   // Here, we just instantiate MinnesotaAdapter directly.
   const adapter = new MinnesotaAdapter();
+
+  // For this test, we specifically want to exercise the per-CD "sources" path,
+  // independent of whether the manifest has a statewide 'url'.
+  adapter.mode = "sources";
+  adapter.sources = [
+    { cd: "1", url: "https://example.com/cd1" },
+    { cd: "2", url: "https://example.com/cd2" },
+    { cd: "3", url: "https://example.com/cd3" },
+  ];
 
   // Silence log noise for this test
   const originalLog = console.log;
@@ -148,7 +157,10 @@ test("catalog -> MinnesotaAdapter -> unified data pipeline works", async () => {
 
     assert.strictEqual(ids.length, sourceCount);
     // Spot-check first ID format
-    assert.ok(/^\d{4}$/.test(ids[0]), "precinct_id should look like zero-padded string");
+    assert.ok(
+      /^\d{4}$/.test(ids[0]),
+      "precinct_id should look like zero-padded string"
+    );
   } finally {
     console.log = originalLog;
   }

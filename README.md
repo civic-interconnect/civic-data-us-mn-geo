@@ -48,7 +48,7 @@ Each function creates new immutable objects without modifying the original input
 
 Official precinct boundary data are published by the  
 [Minnesota Secretary of State](https://www.sos.mn.gov/election-administration-campaigns/data-maps/voting-precincts/)  
-through the **Maps and Geodata** resources (e.g., Voting Precincts Shapefiles and GeoJSON).
+through the **Maps and Geodata** resources (e.g., Voting Precincts Shapefiles and GeoJSON) at <https://www.sos.mn.gov/media/2791/mn-precincts.json>.
 
 The Secretary of State website does **not specify an open data license**.
 
