@@ -45,7 +45,7 @@ Update `CHANGELOG.md` with the new repo version:
 2. Add a matching entry at the bottom.
    
 Update `CITATION.cff` and manifest.json with the new incremented version. 
-1. In CITATION, version appears twice.
+1. In CITATION, version appears twice. CHANGE date-released: yyyy-mm-dd ALSO.
 2. In manifest, version appears once. 
 
 ```shell
@@ -85,13 +85,5 @@ After pushing a new tag:
 4. Zenodo generates a new record ID.
 5. Copy that record DOI into CITATION.cff under preferred-citation.doi.
 6. Copy that record into README.md Zenodo badge. 
-7. Git add-commit-push CITATION.cff + README.md updates referencing the new DOI.
-   
-## CloudFlare
+7. Git add-commit-push CITATION.cff and README.md updates referencing the new DOI.
 
-```bash
-npx wrangler login
-npx wrangler kv namespace create RATE_LIMIT_KV
-
-
-```

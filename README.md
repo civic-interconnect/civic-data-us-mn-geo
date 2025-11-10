@@ -4,15 +4,15 @@
 [![License: CC BY 4.0](https://img.shields.io/badge/license-CC--BY--4.0-green.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Validate Catalog](https://github.com/civic-interconnect/civic-data-boundaries-us-mn/actions/workflows/validate.yml/badge.svg)](https://github.com/civic-interconnect/civic-data-boundaries-us-mn/actions/workflows/validate.yml)
 
-> Data adapter, metadata, and transformation functions for Minnesota boundary data.
-> Converts Minnesota Secretary of State GeoJSON into a unified Civic Interconnect schema.
+> Data adapter, metadata, and transformation functions for Minnesota boundary data.  
+> Converts the Minnesota Secretary of State GeoJSON format into the unified Civic Interconnect schema.
 
 ## Adapter
 
 This repository provides a data adapter for Minnesota boundary data.
-It translates the Minnesota Secretary of State's GeoJSON format into a unified, cross-state schema.
+It translates the Minnesota Secretary of State GeoJSON format into a unified, cross-state schema.
 
-Specifically, it includes:
+It includes:
 
 - Metadata describing where to fetch official precinct data
 - Transformation functions to convert Minnesota source fields into the unified Civic Interconnect schema
@@ -22,8 +22,6 @@ Specifically, it includes:
 
 - Fetches data directly from official public sources
 - Normalizes state-specific formats into a consistent national structure
-- Uses declarative, data-driven mappings so many updates require no code changes
-
 
 ## Machine-Readable Catalog
 
@@ -34,14 +32,7 @@ For programmatic discovery, see the machine-readable API catalog:
 
 ## Transformation Functions
 
-The `js/transform.js` file provides pure, read-only functions that convert Minnesota GeoJSON into the unified Civic Interconnect schema:
-
-- transformProperties(mnProperties) - maps property names to unified schema
-- transformGeometry(mnGeometry) - converts GeometryCollection/Polygon to MultiPolygon
-- transformFeature(mnFeature) - transforms a single feature
-- transformFeatureCollection(mnGeoJson) - transforms an entire collection
-- mergeFeatureCollections(featureCollections) - merges multiple congressional district files
-
+The `src/shared/transform.js` file provides pure, read-only functions that convert Minnesota GeoJSON into the unified Civic Interconnect schema.
 Each function creates new immutable objects without modifying the original input.
 
 ## Source and Licensing
@@ -63,15 +54,3 @@ Users should review and comply with the Minnesota Secretary of State Terms & Con
 
 See `CITATION.cff` for citation details.
 
-## Testing
-
-GitHub Pages site (hosted from root, not docs) is used to test.
-Calls are cached for a hour to avoid issues with hitting host data sites.
-All JS uses ESM modules. 
-
-We do not share (between Node and the browser):
-
-- How we fetch data (Node uses fetch or https; browser uses fetchStateResource via proxy).
-- How we load the manifest (Node reads from disk or imports JSON; browser fetches it over HTTP)
-- Logging, retries, validation, tests.
-- These are environment-specific and will diverge.

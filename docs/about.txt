@@ -1,0 +1,5 @@
+## docs/about.txt
+
+This GitHub Pages site (hosted from the repository root) is used to test live data access and schema transformations for Minnesota precinct boundaries.
+
+External data requests are cached for one hour to reduce load and avoid triggering rate limits or blocks from the official source site.
