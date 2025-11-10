@@ -94,9 +94,12 @@ class MinnesotaAdapter {
       this.fetchDistrict(s).catch(() => null)
     );
     const results = (await Promise.all(fetchPromises)).filter(Boolean);
-    if (results.length === 0) {
-      throw new Error("Failed to fetch any precinct data");
-    }
+if (results.length === 0) {
+  throw new Error(
+    "[MinnesotaAdapter] Failed to fetch any precinct data from upstream sources"
+  );
+}
+
 
     // Transform each district FC, then merge
     const transformed = results.map((fc) =>

@@ -17,6 +17,12 @@ const PROXY_BASE = "https://civic-proxy.denisecase.workers.dev/?url=";
 
 /**
  * Helper to fetch data via proxy (for GitHub Actions)
+ *
+ * - On 200 OK: returns parsed JSON (GeoJSON)
+ * - On non-200:
+ *   - Tries to parse JSON error returned by the proxy
+ *   - If it finds `error`, throws Error with message "PROXY_ERROR:<error>:<message>"
+ *   - Otherwise throws Error("HTTP <status> for <url>")
  */
 async function fetchViaProxy(url) {
   const proxiedUrl = PROXY_BASE + encodeURIComponent(url);
@@ -31,18 +37,42 @@ async function fetchViaProxy(url) {
         });
 
         res.on("end", () => {
-          if (res.statusCode !== 200) {
-            reject(new Error(`HTTP ${res.statusCode} for ${url}`));
-          } else {
+          const status = res.statusCode || 0;
+
+          if (status !== 200) {
+            // Try to interpret proxy error payload
             try {
-              resolve(JSON.parse(data));
+              const parsed = JSON.parse(data);
+              if (parsed && typeof parsed === "object" && parsed.error) {
+                const msg = parsed.message || "";
+                reject(
+                  new Error(
+                    `PROXY_ERROR:${parsed.error}:${msg}`.replace(/:+$/, "")
+                  )
+                );
+                return;
+              }
             } catch (e) {
-              reject(new Error(`Invalid JSON from ${url}: ${e.message}`));
+              // If JSON parse fails, fall through to generic HTTP error
             }
+
+            reject(new Error(`HTTP ${status} for ${url}`));
+            return;
+          }
+
+          try {
+            const json = JSON.parse(data);
+            resolve(json);
+          } catch (e) {
+            reject(
+              new Error(`Invalid JSON from proxy for ${url}: ${e.message}`)
+            );
           }
         });
       })
-      .on("error", reject);
+      .on("error", (err) => {
+        reject(err);
+      });
   });
 }
 
@@ -232,15 +262,15 @@ test.describe("Minnesota Adapter Integration Tests", () => {
           `Success:  CD${cdNum} has ${data.features.length} precincts`
         );
       } catch (error) {
-        const msg = String(error.message || "");
+        const msg = String(error && error.message ? error.message : "");
 
-        // Treat "Invalid JSON" from SOS as "remote data not usable" and skip
-        // Treat upstream issues as "skip" instead of failing CI
+        // Treat upstream/proxy issues as "skip" instead of failing CI
         if (
           msg.includes("ENOTFOUND") ||
           msg.includes("ETIMEDOUT") ||
           msg.includes("Invalid JSON") ||
-          msg.includes("HTTP 404")
+          msg.startsWith("HTTP ") || // HTTP 4xx/5xx via proxy
+          msg.startsWith("PROXY_ERROR:") // rate_limited, upstream_not_json, etc.
         ) {
           console.log(
             `Warning: Remote data for CD${cdNum} not available / usable (${msg}), skipping CD${cdNum} fetch test`
@@ -248,6 +278,7 @@ test.describe("Minnesota Adapter Integration Tests", () => {
           return;
         }
 
+        // Anything else is a genuine regression
         throw error;
       }
     }
@@ -298,10 +329,19 @@ test.describe("Minnesota Adapter Integration Tests", () => {
           `Success:  Unified collection has ${featureCount} valid features`
         );
       } catch (error) {
-        // Network errors are warnings, not failures
-        if (error.message.includes("fetch") || error.message.includes("HTTP")) {
+        const msg = String(error && error.message ? error.message : "");
+
+        // Network/proxy/adapter-upstream errors are warnings, not failures
+        if (
+          msg.includes("fetch") || // generic fetch errors
+          msg.includes("HTTP") || // HTTP 4xx/5xx
+          msg.startsWith("PROXY_ERROR:") || // our proxy error wrapper
+          msg === "[MinnesotaAdapter] Failed to fetch any precinct data from upstream sources" // adapter: all districts failed
+        ) {
           console.log(
-            "Warning:  Network unavailable, skipping full fetch test"
+            "Warning:  Upstream precinct data unavailable, skipping full fetch test (" +
+              msg +
+              ")"
           );
           return;
         }

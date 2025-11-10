@@ -87,3 +87,11 @@ After pushing a new tag:
 6. Copy that record into README.md Zenodo badge. 
 7. Git add-commit-push CITATION.cff + README.md updates referencing the new DOI.
    
+## CloudFlare
+
+```bash
+npx wrangler login
+npx wrangler kv namespace create RATE_LIMIT_KV
+
+
+```
