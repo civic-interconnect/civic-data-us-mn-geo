@@ -1,3 +1,5 @@
+# .github/workflows/validate.yml
+
 name: Validate Catalog Schema
 
 on:

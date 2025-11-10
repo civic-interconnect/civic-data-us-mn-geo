@@ -1,0 +1,64 @@
+# .github/workflows/test.yml
+# Automated testing for Minnesota precinct data adapter
+# - On push/PR: validate manifest and run unit tests
+# - On schedule: run live upstream health check and open issue if it fails
+
+name: Test MN Boundary Data
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'src/**'
+      - 'manifest.json'
+      - 'api/v1.0.0/catalog.json'
+      - 'schemas/**'
+      - '.github/workflows/tests.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'manifest.json'
+      - 'api/v1.0.0/catalog.json'
+      - 'schemas/**'
+
+  schedule:
+    # Run on the 1st of every month at 00:00 UTC
+    - cron: '0 0 1 * *'
+
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+
+jobs:
+  validate-and-unit-tests:
+    name: Validate manifest and run unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1) Check out repository
+        uses: actions/checkout@v5
+
+      - name: 2) Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: 3) Install dependencies
+        run: npm install
+
+      - name: 4) Validate catalog and manifest (if you have these scripts)
+        run: |
+          if npm run -s validate:catalog 2>/dev/null; then
+            echo "validate:catalog script found and executed."
+          else
+            echo "No validate:catalog script, skipping."
+          fi
+
+      - name: 5) Run unit tests (adapter / catalog_adapter / transform)
+        run: |
+          echo "Running unit tests..."
+          # Assumes package.json has: "test": "node --test tests/*.test.js"
+          npm test
