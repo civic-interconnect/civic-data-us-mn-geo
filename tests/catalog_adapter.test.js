@@ -1,13 +1,18 @@
-// js/catalog_adapter.test.js
-// End-to-end style tests: catalog.json -> manifest.json -> MinnesotaAdapter
+/**
+ * Unit tests for catalog.json and manifest.json consistency
+ * 
+ * File: tests/catalog_adapter.test.js
+ * 
+ * Run with: node --test tests/catalog_adapter.test.js
+ */
 
-const test = require("node:test");
-const assert = require("assert");
+import test from "node:test";
+import assert from "node:assert";
+import MinnesotaAdapter from "../src/adapter.js";
+import { CRS84 } from "../src/shared/transform.js";
+import catalog from "../api/v1.0.0/catalog.json" assert { type: "json" };
+import manifest from "../manifest.json" with { type: "json" };
 
-const MinnesotaAdapter = require("./adapter");
-const { CRS84 } = require("./transform");
-const catalog = require("../api/v1.0.0/catalog.json");
-const manifest = require("../manifest.json");
 
 // Helper: minimal MN-style properties
 function makeMnProps(overrides = {}) {

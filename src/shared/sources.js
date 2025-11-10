@@ -1,3 +1,9 @@
+/**
+ * Minnesota Precinct Data Sources
+ *
+ * File: src/shared/sources.js (Node and Browser)
+ */
+
 const SOURCE_LIST = [
   { cd: "1", url: "https://www.sos.mn.gov/media/2785/mn-cd1-precincts.json" },
   { cd: "2", url: "https://www.sos.mn.gov/media/2786/mn-cd2-precincts.json" },
@@ -9,4 +15,4 @@ const SOURCE_LIST = [
   { cd: "8", url: "https://www.sos.mn.gov/media/2792/mn-cd8-precincts.json" },
 ];
 
-module.exports = SOURCE_LIST;
+export default SOURCE_LIST;

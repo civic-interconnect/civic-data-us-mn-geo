@@ -1,12 +1,18 @@
-// scripts/validate-catalog.js
-// Validate api/v1.0.0/catalog.json against JSON Schema (2020-12) using Ajv v8.
+/**
+ * Validate catalog.json against JSON Schema (2020-12) using Ajv v8.
+ * 
+ * File: scripts/validate-catalog.js
+ */
 
-const fs = require("fs");
-const path = require("path");
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import Ajv2020 from "ajv/dist/2020.js";
+import addFormats from "ajv-formats";
 
-// Ajv build for draft 2020-12
-const Ajv2020 = require("ajv/dist/2020");
-const addFormats = require("ajv-formats");
+// ESM-safe __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Utility to load JSON relative to repo root
 function loadJson(relPath) {

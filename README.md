@@ -62,3 +62,16 @@ This repository and associated Zenodo record:
 Users should review and comply with the Minnesota Secretary of State Terms & Conditions when accessing the original data.
 
 See `CITATION.cff` for citation details.
+
+## Testing
+
+GitHub Pages site (hosted from root, not docs) is used to test.
+Calls are cached for a hour to avoid issues with hitting host data sites.
+All JS uses ESM modules. 
+
+We do not share (between Node and the browser):
+
+- How we fetch data (Node uses fetch or https; browser uses fetchStateResource via proxy).
+- How we load the manifest (Node reads from disk or imports JSON; browser fetches it over HTTP)
+- Logging, retries, validation, tests.
+- These are environment-specific and will diverge.

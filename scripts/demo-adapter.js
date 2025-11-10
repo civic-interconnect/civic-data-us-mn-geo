@@ -1,5 +1,11 @@
-const fs = require("fs");
-const MinnesotaAdapter = require("../js/adapter");
+/**
+ * Demo script to generate Minnesota precincts GeoJSON using MinnesotaAdapter
+ *
+ * Run with: node scripts/demo-adapter.js
+ */
+
+import fs from "fs";
+import MinnesotaAdapter from "../src/adapter";
 
 async function demo() {
   const adapter = new MinnesotaAdapter();

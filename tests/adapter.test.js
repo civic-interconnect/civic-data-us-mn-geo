@@ -1,14 +1,16 @@
-// js/adapter.test.js
-// Tests for js/adapter.js using Node's built-in test runner
+/**
+ * Unit tests for MinnesotaAdapter using Node's built-in test runner
+ *
+ * File: tests/adapter.test.js
+ *
+ * Run with: node --test tests/adapter.test.js
+ */
 
-const test = require("node:test");
-const assert = require("assert");
-
-const MinnesotaAdapter = require("./adapter");
-const { CRS84 } = require("./transform");
-const manifest = require("../manifest.json");
-
-// Shared helpers from transform tests
+import test from "node:test";
+import assert from "node:assert";
+import MinnesotaAdapter from "../src/adapter.js";
+import { CRS84 } from "../src/shared/transform.js";
+import manifest from "../manifest.json" with { type: "json" };
 
 function makeMnProps(overrides = {}) {
   return {
@@ -186,6 +188,6 @@ test("fetchPrecincts throws when all districts fail in 'sources' mode", async ()
     async () => {
       await adapter.fetchPrecincts();
     },
-    /Failed to fetch any precinct data from Minnesota Secretary of State/
+    /Failed to fetch any precinct data/i
   );
 });

@@ -1,0 +1,13 @@
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 1rem;
+      }
+      pre {
+        background: #111;
+        color: #eee;
+        padding: 1rem;
+        white-space: pre-wrap;
+        font-size: 0.85rem;
+        max-height: 70vh;
+        overflow: auto;
+      }

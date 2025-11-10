@@ -2,13 +2,13 @@
   "name": "civic-data-boundaries-us-mn",
   "version": "2025.04.4",
   "description": "Minnesota boundary data adapter with validation",
-  "type": "commonjs",
-  "main": "js/adapter.js",
+  "type": "module",
+  "main": "src/adapter.js",
   "scripts": {
     "test": "npm run test:unit && npm run test:integration",
-    "test:unit": "node --test --test-reporter=spec js/adapter.test.js",
-    "test:integration": "node --test --test-reporter=spec js/adapter.integration.test.js",
-    "test:watch": "node --test --watch --test-reporter=spec js/*.test.js",
+    "test:unit": "node --test --test-reporter=spec tests/adapter.test.js",
+    "test:integration": "node --test --test-reporter=spec tests/adapter.integration.test.js",
+    "test:watch": "node --test --watch --test-reporter=spec tests/*.test.js",
     "validate": "npm run validate:catalog",
     "validate:catalog": "node scripts/validate-catalog.js",
     "check": "npm run test && npm run validate",
@@ -17,7 +17,8 @@
   "dependencies": {},
   "devDependencies": {
     "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1"
+    "ajv-formats": "^3.0.1",
+    "eslint": "^9.39.1"
   },
   "engines": {
     "node": ">=20.0.0"

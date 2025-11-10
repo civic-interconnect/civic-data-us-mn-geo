@@ -1,10 +1,14 @@
-// js/transform.test.js
-// Tests for js/transform.js using Node's built-in test runner
+/**
+ * Unit tests for transform.js using Node's built-in test runner
+ *
+ * File: tests/transform.test.js
+ *
+ * Run with: node --test tests/transform.test.js
+ */
 
-const test = require("node:test");
-const assert = require("assert");
-
-const {
+import test from "node:test";
+import assert from "node:assert";
+import {
   CRS84,
   manifestPropertyMap,
   transformProperties,
@@ -12,9 +16,8 @@ const {
   transformFeature,
   transformFeatureCollection,
   mergeFeatureCollections,
-} = require("./transform");
+} from "../src/shared/transform.js";
 
-// Helper: basic MN-style properties
 function makeMnProps(overrides = {}) {
   return {
     PrecinctID: "0001",
@@ -45,10 +48,7 @@ const SAMPLE_POLYGON = {
 test("CRS84 constant has expected structure", () => {
   assert.strictEqual(CRS84.type, "name");
   assert.ok(CRS84.properties);
-  assert.strictEqual(
-    CRS84.properties.name,
-    "urn:ogc:def:crs:OGC:1.3:CRS84"
-  );
+  assert.strictEqual(CRS84.properties.name, "urn:ogc:def:crs:OGC:1.3:CRS84");
 });
 
 test("manifestPropertyMap includes expected keys", () => {
@@ -116,7 +116,15 @@ test("transformGeometry converts GeometryCollection of Polygons to MultiPolygon"
 test("transformGeometry passes through existing MultiPolygon", () => {
   const multi = {
     type: "MultiPolygon",
-    coordinates: [[[[-93, 45], [-93.1, 45], [-93, 45]]]],
+    coordinates: [
+      [
+        [
+          [-93, 45],
+          [-93.1, 45],
+          [-93, 45],
+        ],
+      ],
+    ],
   };
 
   const result = transformGeometry(multi);

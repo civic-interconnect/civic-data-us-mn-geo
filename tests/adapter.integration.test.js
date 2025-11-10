@@ -1,13 +1,16 @@
-// js/adapter.integration.test.js
-// Integration tests for MinnesotaAdapter with real data fetching
-// Run with: node --test js/adapter.integration.test.js
+/**
+ * Integration tests for MinnesotaAdapter with real data fetching
+ *
+ * File: tests/adapter.integration.test.js
+ *
+ * Run with: node --test tests/adapter.integration.test.js
+ */
 
-const test = require("node:test");
-const assert = require("assert");
-const https = require("https");
-const MinnesotaAdapter = require("./adapter");
-const originalFetch = global.fetch;
-const src_list = require("./sources");
+import test from "node:test";
+import assert from "node:assert";
+import https from "node:https";
+import MinnesotaAdapter from "../src/adapter.js";
+import src_list from "../src/shared/sources.js";
 
 // Proxy configuration for CORS-enabled fetching
 const PROXY_BASE = "https://civic-proxy.denisecase.workers.dev/?url=";
@@ -225,7 +228,9 @@ test.describe("Minnesota Adapter Integration Tests", () => {
           `CD${cdNum} features should have CongDist='${cdNum}'`
         );
 
-        console.log(`Success:  CD${cdNum} has ${data.features.length} precincts`);
+        console.log(
+          `Success:  CD${cdNum} has ${data.features.length} precincts`
+        );
       } catch (error) {
         const msg = String(error.message || "");
 
@@ -287,11 +292,15 @@ test.describe("Minnesota Adapter Integration Tests", () => {
           validatePrecinctFeature(unified.features[i], i);
         }
 
-        console.log(`Success:  Unified collection has ${featureCount} valid features`);
+        console.log(
+          `Success:  Unified collection has ${featureCount} valid features`
+        );
       } catch (error) {
         // Network errors are warnings, not failures
         if (error.message.includes("fetch") || error.message.includes("HTTP")) {
-          console.log("Warning:  Network unavailable, skipping full fetch test");
+          console.log(
+            "Warning:  Network unavailable, skipping full fetch test"
+          );
           return;
         }
         throw error;
@@ -497,7 +506,6 @@ test.describe("Minnesota Adapter Integration Tests", () => {
 
       // Test with all 8 CDs
       adapter.mode = "sources";
-      const src_list = require("./sources");
       adapter.sources = src_list;
 
       try {
